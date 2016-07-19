@@ -1,0 +1,51 @@
+<div class="jumbotron">
+  <h1 class="display-3">weather app</h1>
+  <p class="lead">a simple weather app using OpenWeatherMap API and AngularJS.</p>
+  <hr class="m-y-2">
+  <form name="zipform" class="form-inline">
+    <fieldset class="form-group">
+      <label for="forecast-zip" class="form-control-label">Zip Code</label>
+      <input id="forecast-zip" class="form-control form-control-success" name="zipcode" type="text" ng-model="zip" ng-pattern="/[0-9]{5}/"
+        ng-required="true" maxlength="5" novalidate>
+      <button id="submitzip" type="submit" class="btn btn-primary" ng-click="findWeather()">Get Weather</button>
+      <span class="error-required" ng-show="zipform.zipcode.$error.required">zip code is required</span>
+      <span class="error-pattern" ng-show="zipform.zipcode.$error.pattern">zip code should be at least 5 digits</span>
+    </fieldset>
+  </form>
+
+</div>
+
+<div ng-show="ziptest" class="forecast">
+
+  <div class="current-conditions">
+
+    <div class="pull-xs-left">
+      <span class="city">{{ weather[1].data.city.name }}</span>
+      <span class="time">{{ weather[0].data.dt * 1000 | date:'longDate'}}</span>
+      <span class="currently">{{ weather[0].data.weather[0].description }}</span>
+    </div>
+    <div class="pull-xs-right">
+      <span class="humidity">Humidity: {{ weather[0].data.main.humidity | number:0 }}%</span>
+      <span class="wind">Wind: {{ weather[0].data.wind.speed | number:0 }} mph</span>
+    </div>
+
+    <div class="pull-xs-none">
+      <img ng-src="http://openweathermap.org/img/w/{{ weather[0].data.weather[0].icon }}.png" alt="{{ weather[0].data.weather[0].description}}">
+      <span class="temp">{{ weather[0].data.main.temp | number:0 }}</span>
+      <span class="faren">°F</span>
+    </div>
+
+  </div>
+
+  <ul class="seven-day-outlook">
+    <li ng-repeat="days in weather[1].data.list">
+      <span class="day" aria-label="{{ days.dt * 1000 | date:'EEEE' }}">{{ days.dt * 1000 | date:'EEE' }}</span>
+      <img ng-src="http://openweathermap.org/img/w/{{ days.weather[0].icon }}.png" alt="{{ days.weather[0].description }}">
+      <div class="hi-lo">
+        <span class="hi-temp">{{ days.temp.max | number:0 }}°</span>
+        <span class="lo-temp">{{ days.temp.min | number:0 }}°</span>
+      </div>
+    </li>
+  </ul>
+
+</div>
